@@ -2,39 +2,40 @@ package day1.calculator;
 
 import java.util.regex.Pattern;
 
+/**
+ * 싱글톤을 고려하지 않기 떄문에, 동시성 이슈는 생략합니다.
+ */
 class Calculator {
 
-    private final static String ALLOW_INPUT_PATTERN = "^[0-9]*$";
+    private final static String ALLOWED_INPUT_PATTERN = "^[0-9]*$";
+    private long currentResult;
     private Operator currentOperator;
 
     public long execute(String input) {
 
-        String[] strArray = input.split(" ");
+        String[] inputArray = input.split("\\s+");
 
-        int result = Integer.parseInt(strArray[0]);
+        currentResult = Long.parseLong(inputArray[0]);
 
-        for (String element : strArray) {
+        for (String element : inputArray) {
             if (currentOperator != null) {
-                result = calculate(result, element, currentOperator);
+                currentResult = calculate(element, currentOperator);
             }
             saveOperator(element);
         }
-        return result;
+        return currentResult;
     }
 
-    private int calculate(int result, String input, Operator operator) {
+    private long calculate(String input, Operator operator) {
+        return isAllowedNumberFormat(input) ? operator.operate(currentResult, Integer.parseInt(input)) : currentResult;
+    }
 
-        if (Pattern.matches(ALLOW_INPUT_PATTERN, input)) {
-            return operator.operate(result, Integer.parseInt(input));
-        }
-
-        saveOperator(input);
-
-        return result;
+    private boolean isAllowedNumberFormat(String input) {
+        return Pattern.matches(ALLOWED_INPUT_PATTERN, input);
     }
 
     private void saveOperator(String input) {
-        if (Character.isDigit(input.charAt(0))) {
+        if (isAllowedNumberFormat(input)) {
             return;
         }
         currentOperator = Operator.findByValue(input);

@@ -9,15 +9,15 @@ public enum Operator {
     MINUS("-", (a, b) -> a - b),
     MULTIPLY("*", (a, b) -> a * b),
     DIVIDE("/", (a, b) -> {
-        if (b == 0) throw new IllegalArgumentException("0으로 나눌 수 없습니다.");
+        if (b == 0) throw new ArithmeticException("0으로 나눌 수 없습니다.");
         return a / b;
     }),
     ;
 
     private final String value;
-    private final BiFunction<Integer, Integer, Integer> operateFunction;
+    private final BiFunction<Long, Long, Long> operateFunction;
 
-    Operator(String value, BiFunction<Integer, Integer, Integer> operateFunction) {
+    Operator(String value, BiFunction<Long, Long, Long> operateFunction) {
         this.value = value;
         this.operateFunction = operateFunction;
     }
@@ -26,7 +26,7 @@ public enum Operator {
         return value;
     }
 
-    public int operate(int a, int b) {
+    public long operate(long a, long b) {
         return operateFunction.apply(a, b);
     }
 

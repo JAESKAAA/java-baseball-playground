@@ -23,6 +23,18 @@ public class CalculatorTest {
 
         assertThat(result).isEqualTo(expectedValue);
     }
+    @Test
+    @DisplayName("입력값에 띄어쓰기가 여러번 들어 가도 연산이 가능합니다.")
+    void calculate_space_test() {
+
+        String testValue = "2    + 3  - 1 * 2 / 2";
+
+        long result = new Calculator().execute(testValue);
+
+        long expectedValue = 4;
+
+        assertThat(result).isEqualTo(expectedValue);
+    }
 
     @Test
     @DisplayName("입력값이 null일때 NPE 발생힙니다.")
@@ -43,12 +55,12 @@ public class CalculatorTest {
     }
 
     @Test
-    @DisplayName("나누는 숫자가 0일때, IllegalArgumentException 발생힙니다.")
+    @DisplayName("나누는 숫자가 0일때, ArithmeticException 발생힙니다.")
     void divided_by_zero_test() {
 
         String testValue = "2 + 3 - 1 * 2 / 0";
 
-        assertThatThrownBy(() -> new Calculator().execute(testValue)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> new Calculator().execute(testValue)).isInstanceOf(ArithmeticException.class);
     }
 
     @Test
@@ -59,6 +71,4 @@ public class CalculatorTest {
 
         assertThatThrownBy(() -> new Calculator().execute(testValue)).isInstanceOf(IllegalArgumentException.class);
     }
-
-
 }
